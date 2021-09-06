@@ -1,0 +1,4 @@
+<module rename-to="Arkanoid">
+    <inherits name='com.google.gwt.user.User'/>
+    <entry-point class='com.kenez92.client.ArkanoidApplication'/>
+</module>
