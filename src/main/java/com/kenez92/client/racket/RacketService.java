@@ -1,23 +1,24 @@
-package com.kenez92.client.service;
+package com.kenez92.client.racket;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.kenez92.client.model.Racket;
-import com.kenez92.client.utils.Consts;
 
-class RacketService {
+import static com.kenez92.client.settings.BoardSettings.BOARD_WIDTH;
+import static com.kenez92.client.settings.RacketSettings.RACKET_WIDTH;
+
+public class RacketService {
     private double xPosition;
     private final Racket racket;
 
-    RacketService() {
+    public RacketService() {
         this.racket = new Racket();
     }
 
-    Racket getRacket() {
+    public Racket getRacket() {
         return racket;
     }
 
-    void addListeners(Canvas canvas) {
+    public void addListeners(Canvas canvas) {
         addMouseListener(canvas);
         canvas.addKeyDownHandler(this::arrowsControl);
     }
@@ -30,9 +31,9 @@ class RacketService {
     }
 
     private void mouseMoving() {
-        racket.setXPosition(xPosition - Consts.RACKET_WIDTH / 2);
-        if (racket.getXPosition() + Consts.RACKET_WIDTH >= Consts.BOARD_WIDTH) {
-            racket.setXPosition(Consts.BOARD_WIDTH - Consts.RACKET_WIDTH);
+        racket.setXPosition(xPosition - RACKET_WIDTH / 2);
+        if (racket.getXPosition() + RACKET_WIDTH >= BOARD_WIDTH) {
+            racket.setXPosition(BOARD_WIDTH - RACKET_WIDTH);
         }
         if (racket.getXPosition() <= 0) {
             racket.setXPosition(0);
@@ -48,10 +49,10 @@ class RacketService {
             }
             racket.setXPosition(position);
         }
-        if (keyDownEvent.isRightArrow() && racket.getXPosition() < Consts.BOARD_WIDTH - Consts.RACKET_WIDTH) {
+        if (keyDownEvent.isRightArrow() && racket.getXPosition() < BOARD_WIDTH - RACKET_WIDTH) {
             position = racket.getXPosition() + 10;
-            if (position > Consts.BOARD_WIDTH - Consts.RACKET_WIDTH) {
-                position = Consts.BOARD_WIDTH - Consts.RACKET_WIDTH;
+            if (position > BOARD_WIDTH - RACKET_WIDTH) {
+                position = BOARD_WIDTH - RACKET_WIDTH;
             }
             racket.setXPosition(position);
         }

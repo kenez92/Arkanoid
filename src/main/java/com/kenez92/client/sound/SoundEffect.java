@@ -1,4 +1,4 @@
-package com.kenez92.client.enums;
+package com.kenez92.client.sound;
 
 public enum SoundEffect {
     GAME_WIN,

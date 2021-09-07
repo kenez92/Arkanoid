@@ -1,4 +1,4 @@
-package com.kenez92.client.enums;
+package com.kenez92.client.ball;
 
 public enum BallSpeed {
     SLOW, EASY, NORMAL, DIFFICULTY, HARD

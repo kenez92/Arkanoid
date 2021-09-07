@@ -1,9 +1,7 @@
-package com.kenez92.client.controller;
+package com.kenez92.client.game;
 
 import com.google.gwt.canvas.client.Canvas;
-import com.kenez92.client.enums.BallSpeed;
-import com.kenez92.client.service.GameService;
-import com.kenez92.client.utils.Consts;
+import com.kenez92.client.ball.BallSpeed;
 
 
 public class GameController {

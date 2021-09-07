@@ -4,8 +4,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.kenez92.client.controller.GameController;
-import com.kenez92.client.enums.BallSpeed;
+import com.kenez92.client.game.GameController;
+import com.kenez92.client.ball.BallSpeed;
 
 public class ArkanoidApplication implements EntryPoint {
     private final GameController gameController;

@@ -1,7 +1,13 @@
-package com.kenez92.client.model;
+package com.kenez92.client.ball;
 
-import com.kenez92.client.enums.BallSpeed;
-import com.kenez92.client.utils.Consts;
+import static com.kenez92.client.settings.BallSettings.BALL_RADIUS;
+import static com.kenez92.client.settings.BallSettings.BALL_START_X_POSITION;
+import static com.kenez92.client.settings.BallSettings.BALL_START_Y_POSITION;
+import static com.kenez92.client.settings.BallSettings.DIFFICULTY_BALL_SPEED;
+import static com.kenez92.client.settings.BallSettings.EASY_BALL_SPEED;
+import static com.kenez92.client.settings.BallSettings.HARD_BALL_SPEED;
+import static com.kenez92.client.settings.BallSettings.NORMAL_BALL_SPEED;
+import static com.kenez92.client.settings.BallSettings.SLOW_BALL_SPEED;
 
 public class Ball {
     private double xPosition;
@@ -11,8 +17,8 @@ public class Ball {
     private int ballSpeed;
 
     public Ball() {
-        this.xPosition = Consts.BALL_START_X_POSITION;
-        this.yPosition = Consts.BALL_START_Y_POSITION;
+        this.xPosition = BALL_START_X_POSITION;
+        this.yPosition = BALL_START_Y_POSITION;
     }
 
     public double getXPosition() {
@@ -71,15 +77,15 @@ public class Ball {
     }
 
     public boolean isCollision(double minX, double maxX, double minY, double maxY) {
-        return (this.xPosition + Consts.BALL_RADIUS >= minX
+        return (this.xPosition + BALL_RADIUS >= minX
                 && this.xPosition <= maxX)
-                && (this.yPosition + Consts.BALL_RADIUS >= minY
+                && (this.yPosition + BALL_RADIUS >= minY
                 && this.yPosition <= maxY);
     }
 
     public void resetPosition() {
-        this.xPosition = Consts.BALL_START_X_POSITION;
-        this.yPosition = Consts.BALL_START_Y_POSITION;
+        this.xPosition = BALL_START_X_POSITION;
+        this.yPosition = BALL_START_Y_POSITION;
         this.xDirect = 0;
         this.yDirect = -1;
     }
@@ -88,19 +94,19 @@ public class Ball {
         int ballSpeed;
         switch (level) {
             case EASY:
-                ballSpeed = Consts.EASY_BALL_SPEED;
+                ballSpeed = EASY_BALL_SPEED;
                 break;
             case NORMAL:
-                ballSpeed = Consts.NORMAL_BALL_SPEED;
+                ballSpeed = NORMAL_BALL_SPEED;
                 break;
             case DIFFICULTY:
-                ballSpeed = Consts.DIFFICULTY_BALL_SPEED;
+                ballSpeed = DIFFICULTY_BALL_SPEED;
                 break;
             case HARD:
-                ballSpeed = Consts.HARD_BALL_SPEED;
+                ballSpeed = HARD_BALL_SPEED;
                 break;
             default:
-                ballSpeed = Consts.SLOW_BALL_SPEED;
+                ballSpeed = SLOW_BALL_SPEED;
         }
         this.ballSpeed = ballSpeed;
     }

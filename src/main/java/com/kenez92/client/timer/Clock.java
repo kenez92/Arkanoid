@@ -1,4 +1,4 @@
-package com.kenez92.client.model;
+package com.kenez92.client.timer;
 
 import com.google.gwt.user.client.Timer;
 

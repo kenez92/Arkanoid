@@ -1,18 +1,25 @@
-package com.kenez92.client.service;
+package com.kenez92.client.game;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.user.client.Timer;
-import com.kenez92.client.enums.BallSpeed;
-import com.kenez92.client.enums.GameState;
-import com.kenez92.client.enums.SoundEffect;
+import com.kenez92.client.ball.BallSpeed;
+import com.kenez92.client.sound.SoundEffect;
 import com.kenez92.client.exception.LifeLostException;
-import com.kenez92.client.model.Brick;
-import com.kenez92.client.model.Clock;
-import com.kenez92.client.model.PlayerInfo;
-import com.kenez92.client.utils.Consts;
-import com.kenez92.client.utils.SoundUtil;
+import com.kenez92.client.brick.Brick;
+import com.kenez92.client.timer.Clock;
+import com.kenez92.client.player.PlayerInfo;
+import com.kenez92.client.ball.BallService;
+import com.kenez92.client.board.BoardService;
+import com.kenez92.client.brick.BrickService;
+import com.kenez92.client.racket.RacketService;
+import com.kenez92.client.sound.SoundService;
 
 import java.util.List;
+
+import static com.kenez92.client.settings.BoardSettings.BOARD_REFRESH_TIME;
+import static com.kenez92.client.settings.GameSettings.GAME_START_LEVEL;
+import static com.kenez92.client.settings.GameSettings.GAME_TIME_IN_SECONDS;
+import static com.kenez92.client.settings.GameSettings.LIFE_QUANTITY;
 
 public class GameService {
     private final BoardService boardService;
@@ -61,7 +68,7 @@ public class GameService {
     }
 
     public void prepareNewGame(BallSpeed ballSpeed) {
-        this.playerInfo = new PlayerInfo(Consts.LIFE_QUANTITY, ballSpeed, Consts.GAME_START_LEVEL);
+        this.playerInfo = new PlayerInfo(LIFE_QUANTITY, ballSpeed, GAME_START_LEVEL);
         prepareNewGame(playerInfo);
     }
 
@@ -70,12 +77,12 @@ public class GameService {
         this.ballService.resetBallPositions();
         this.brickService.createBricks(playerInfo.getLevel());
         this.gameState = GameState.ABOUT_TO_START;
-        this.clock = new Clock((playerInfo.getLevel() > 0 ? playerInfo.getLevel() : 1) * Consts.GAME_TIME_IN_SECONDS);
+        this.clock = new Clock((playerInfo.getLevel() > 0 ? playerInfo.getLevel() : 1) * GAME_TIME_IN_SECONDS);
         process();
     }
 
     private void process() {
-        this.timer.scheduleRepeating(Consts.BOARD_REFRESH_TIME);
+        this.timer.scheduleRepeating(BOARD_REFRESH_TIME);
         checkGameState(brickService.getBricks());
         if (gameState == GameState.PLAYING) {
             try {
@@ -93,13 +100,13 @@ public class GameService {
     private void checkGameState(List<Brick> bricks) {
         if (bricks.size() == 0) {
             this.gameState = GameState.WIN;
-            SoundUtil.sound(SoundEffect.GAME_WIN);
+            SoundService.sound(SoundEffect.GAME_WIN);
             playerInfo.levelUp();
             prepareNewGame(playerInfo);
         }
         if (clock.getTime() <= 0) {
             this.gameState = GameState.LOST;
-            SoundUtil.sound(SoundEffect.GAME_LOST);
+            SoundService.sound(SoundEffect.GAME_LOST);
         }
     }
 

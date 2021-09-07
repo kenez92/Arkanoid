@@ -1,9 +1,12 @@
-package com.kenez92.client.model;
+package com.kenez92.client.brick;
 
-import com.kenez92.client.enums.BrickSide;
-import com.kenez92.client.utils.Consts;
+import com.kenez92.client.ball.Ball;
 
 import java.util.Arrays;
+
+import static com.kenez92.client.settings.BallSettings.BALL_RADIUS;
+import static com.kenez92.client.settings.BrickSettings.BRICK_HEIGHT;
+import static com.kenez92.client.settings.BrickSettings.BRICK_WIDTH;
 
 public class Brick {
     private int brickLevel;
@@ -34,10 +37,10 @@ public class Brick {
 
 
     public BrickSide whichSideWasHit(Ball ball) {
-        double toTheRightSide = Math.abs(this.xPosition + Consts.BRICK_WIDTH - ball.getXPosition());
-        double toTheLeftSide = Math.abs(this.xPosition - (ball.getXPosition() + Consts.BALL_RADIUS));
-        double toTheBottomSide = Math.abs(this.yPosition + Consts.BRICK_HEIGHT - ball.getYPosition());
-        double toTheTopSide = Math.abs(this.yPosition - (ball.getYPosition() + Consts.BALL_RADIUS));
+        double toTheRightSide = Math.abs(this.xPosition + BRICK_WIDTH - ball.getXPosition());
+        double toTheLeftSide = Math.abs(this.xPosition - (ball.getXPosition() + BALL_RADIUS));
+        double toTheBottomSide = Math.abs(this.yPosition + BRICK_HEIGHT - ball.getYPosition());
+        double toTheTopSide = Math.abs(this.yPosition - (ball.getYPosition() + BALL_RADIUS));
 
         double[] array = {toTheRightSide, toTheLeftSide, toTheBottomSide, toTheTopSide};
         Arrays.sort(array);

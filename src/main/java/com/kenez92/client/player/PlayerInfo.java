@@ -1,6 +1,6 @@
-package com.kenez92.client.model;
+package com.kenez92.client.player;
 
-import com.kenez92.client.enums.BallSpeed;
+import com.kenez92.client.ball.BallSpeed;
 
 public class PlayerInfo {
     private int lives;

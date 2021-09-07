@@ -1,18 +1,25 @@
-package com.kenez92.client.service;
+package com.kenez92.client.ball;
 
-import com.kenez92.client.enums.BallSpeed;
-import com.kenez92.client.enums.BrickSide;
-import com.kenez92.client.enums.SoundEffect;
+import com.kenez92.client.brick.Brick;
+import com.kenez92.client.brick.BrickSide;
 import com.kenez92.client.exception.LifeLostException;
-import com.kenez92.client.model.Ball;
-import com.kenez92.client.model.Brick;
-import com.kenez92.client.model.Racket;
-import com.kenez92.client.utils.Consts;
-import com.kenez92.client.utils.SoundUtil;
+import com.kenez92.client.racket.Racket;
+import com.kenez92.client.sound.SoundEffect;
+import com.kenez92.client.sound.SoundService;
 
 import java.util.List;
 
-class BallService {
+import static com.kenez92.client.settings.BallSettings.BALL_RADIUS;
+import static com.kenez92.client.settings.BoardSettings.BOARD_HEIGHT;
+import static com.kenez92.client.settings.BoardSettings.BOARD_WIDTH;
+import static com.kenez92.client.settings.BrickSettings.BRICK_HEIGHT;
+import static com.kenez92.client.settings.BrickSettings.BRICK_WIDTH;
+import static com.kenez92.client.settings.RacketSettings.RACKET_COLLLISION_CORNER;
+import static com.kenez92.client.settings.RacketSettings.RACKET_HEIGHT;
+import static com.kenez92.client.settings.RacketSettings.RACKET_PIECES;
+import static com.kenez92.client.settings.RacketSettings.RACKET_WIDTH;
+
+public class BallService {
     private final Ball ball;
 
     public BallService() {
@@ -24,25 +31,25 @@ class BallService {
     }
 
 
-    void setBallLevel(BallSpeed ballSpeed) {
+    public void setBallLevel(BallSpeed ballSpeed) {
         ball.setBallSpeed(ballSpeed);
     }
 
-    Ball getBall() {
+    public Ball getBall() {
         return ball;
     }
 
-    void resetBallPositions() {
+    public void resetBallPositions() {
         ball.resetPosition();
     }
 
     private void setBallXDirection(Racket racket, List<Brick> bricks) {
         if (checkBorderCollision()) {
-            SoundUtil.sound(SoundEffect.COLLISION_BORDER);
+            SoundService.sound(SoundEffect.COLLISION_BORDER);
         } else if (checkRacketCollision(racket)) {
-            SoundUtil.sound(SoundEffect.COLLISION_RACKET);
+            SoundService.sound(SoundEffect.COLLISION_RACKET);
         } else if (checkBrickCollision(bricks)) {
-            SoundUtil.sound(SoundEffect.COLLISION_BRICK);
+            SoundService.sound(SoundEffect.COLLISION_BRICK);
         }
         ball.move();
     }
@@ -51,15 +58,15 @@ class BallService {
         if (ball.getXPosition() <= 0) {
             ball.setRightDirect();
             return true;
-        } else if (ball.getXPosition() + Consts.BALL_RADIUS >= Consts.BOARD_WIDTH) {
+        } else if (ball.getXPosition() + BALL_RADIUS >= BOARD_WIDTH) {
             ball.setLeftDirect();
             return true;
         } else if (ball.getYPosition() <= 0) {
             ball.setBottomDirect();
             return true;
         }
-        if (ball.getYPosition() >= Consts.BOARD_HEIGHT - Consts.BALL_RADIUS) {
-            SoundUtil.sound(SoundEffect.LIFE_LOST);
+        if (ball.getYPosition() >= BOARD_HEIGHT - BALL_RADIUS) {
+            SoundService.sound(SoundEffect.LIFE_LOST);
             throw new LifeLostException();
         }
         return false;
@@ -68,12 +75,12 @@ class BallService {
     private boolean checkRacketCollision(Racket racket) {
         if (ball.isCollision(
                 racket.getXPosition(),
-                racket.getXPosition() + Consts.RACKET_WIDTH,
+                racket.getXPosition() + RACKET_WIDTH,
                 racket.getYPosition(),
-                racket.getYPosition() + Consts.RACKET_HEIGHT)) {
+                racket.getYPosition() + RACKET_HEIGHT)) {
             ball.setXDirect(getCorner(ball.getXPosition(), racket.getXPosition(), ball.getXDirect()));
             ball.changeYDirect();
-            ball.setYPosition(racket.getYPosition() - Consts.BALL_RADIUS - 1);
+            ball.setYPosition(racket.getYPosition() - BALL_RADIUS - 1);
             return true;
         }
         return false;
@@ -82,8 +89,8 @@ class BallService {
     private boolean checkBrickCollision(List<Brick> bricks) {
         for (int i = 0; i < bricks.size(); i++) {
             Brick brick = bricks.get(i);
-            if (ball.isCollision(brick.getXPosition(), brick.getXPosition() + Consts.BRICK_WIDTH,
-                    brick.getYPosition(), +brick.getYPosition() + Consts.BRICK_HEIGHT)) {
+            if (ball.isCollision(brick.getXPosition(), brick.getXPosition() + BRICK_WIDTH,
+                    brick.getYPosition(), +brick.getYPosition() + BRICK_HEIGHT)) {
                 BrickSide brickSide = brick.whichSideWasHit(ball);
                 changeDirectDependsOnBrickSide(brickSide, brick.getXPosition(), brick.getYPosition());
                 brick.levelDown();
@@ -97,14 +104,14 @@ class BallService {
     }
 
     private double getCorner(double xBallPosition, double xRacketPosition, double xDirect) {
-        xBallPosition = xBallPosition + (Consts.BALL_RADIUS / 2);
-        double onePieceOfRacket = Consts.RACKET_PIECES;
+        xBallPosition = xBallPosition + (BALL_RADIUS / 2);
+        double onePieceOfRacket = RACKET_PIECES;
         double result = xBallPosition - xRacketPosition;
         int pieceOfRacket = (int) (result / onePieceOfRacket);
         if (xDirect > 0) {
-            return Consts.RACKET_COLLLISION_CORNER * pieceOfRacket;
+            return RACKET_COLLLISION_CORNER * pieceOfRacket;
         } else {
-            return Consts.RACKET_COLLLISION_CORNER * (Consts.RACKET_PIECES - pieceOfRacket) * -1;
+            return RACKET_COLLLISION_CORNER * (RACKET_PIECES - pieceOfRacket) * -1;
         }
     }
 
@@ -113,42 +120,42 @@ class BallService {
         if (brickSide != null) {
             switch (brickSide) {
                 case TOP:
-                    ball.setYPosition(brickYPosition - Consts.BALL_RADIUS - 1);
+                    ball.setYPosition(brickYPosition - BALL_RADIUS - 1);
                     ball.changeYDirect();
                     break;
                 case LEFT:
-                    ball.setXPosition(brickXPosition - Consts.BALL_RADIUS - 1);
+                    ball.setXPosition(brickXPosition - BALL_RADIUS - 1);
                     ball.changeXDirect();
                     break;
                 case RIGHT:
-                    ball.setXPosition(brickXPosition + Consts.BRICK_WIDTH + 1);
+                    ball.setXPosition(brickXPosition + BRICK_WIDTH + 1);
                     ball.changeXDirect();
                     break;
                 case BOTTOM:
-                    ball.setYPosition(brickYPosition + Consts.BRICK_HEIGHT + 1);
+                    ball.setYPosition(brickYPosition + BRICK_HEIGHT + 1);
                     ball.changeYDirect();
                     break;
                 case TOP_LEFT_CORNER:
-                    ball.setYPosition(brickYPosition - Consts.BALL_RADIUS - 1);
-                    ball.setXPosition(brickXPosition - Consts.BALL_RADIUS - 1);
+                    ball.setYPosition(brickYPosition - BALL_RADIUS - 1);
+                    ball.setXPosition(brickXPosition - BALL_RADIUS - 1);
                     ball.changeXDirect();
                     ball.changeYDirect();
                     break;
                 case TOP_RIGHT_CORNER:
-                    ball.setYPosition(brickYPosition - Consts.BALL_RADIUS - 1);
-                    ball.setXPosition(brickXPosition + Consts.BRICK_WIDTH + 1);
+                    ball.setYPosition(brickYPosition - BALL_RADIUS - 1);
+                    ball.setXPosition(brickXPosition + BRICK_WIDTH + 1);
                     ball.changeXDirect();
                     ball.changeYDirect();
                     break;
                 case BOTTOM_LEFT_CORNER:
-                    ball.setYPosition(brickYPosition + Consts.BRICK_HEIGHT + 1);
-                    ball.setXPosition(brickXPosition - Consts.BALL_RADIUS - 1);
+                    ball.setYPosition(brickYPosition + BRICK_HEIGHT + 1);
+                    ball.setXPosition(brickXPosition - BALL_RADIUS - 1);
                     ball.changeXDirect();
                     ball.changeYDirect();
                     break;
                 case BOTTOM_RIGHT_CORNER:
-                    ball.setYPosition(brickYPosition + Consts.BRICK_HEIGHT + 1);
-                    ball.setXPosition(brickXPosition + Consts.BRICK_WIDTH + 1);
+                    ball.setYPosition(brickYPosition + BRICK_HEIGHT + 1);
+                    ball.setXPosition(brickXPosition + BRICK_WIDTH + 1);
                     ball.changeXDirect();
                     ball.changeYDirect();
                     break;

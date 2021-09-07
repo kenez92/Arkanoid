@@ -1,14 +1,15 @@
-package com.kenez92.client.model;
+package com.kenez92.client.racket;
 
-import com.kenez92.client.utils.Consts;
+import static com.kenez92.client.settings.RacketSettings.RACKET_START_X_POSITION;
+import static com.kenez92.client.settings.RacketSettings.RACKET_START_Y_POSITION;
 
 public class Racket {
     private double xPosition;
     private double yPosition;
 
     public Racket() {
-        this.xPosition = Consts.RACKET_START_X_POSITION;
-        this.yPosition = Consts.RACKET_START_Y_POSITION;
+        this.xPosition = RACKET_START_X_POSITION;
+        this.yPosition = RACKET_START_Y_POSITION;
     }
 
     public double getXPosition() {
