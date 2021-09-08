@@ -2,17 +2,17 @@ package com.kenez92.client.game;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.user.client.Timer;
-import com.kenez92.client.ball.BallSpeed;
-import com.kenez92.client.sound.SoundEffect;
-import com.kenez92.client.exception.LifeLostException;
-import com.kenez92.client.brick.Brick;
-import com.kenez92.client.timer.Clock;
-import com.kenez92.client.player.PlayerInfo;
 import com.kenez92.client.ball.BallService;
+import com.kenez92.client.ball.BallSpeed;
 import com.kenez92.client.board.BoardService;
+import com.kenez92.client.brick.Brick;
 import com.kenez92.client.brick.BrickService;
+import com.kenez92.client.exception.LifeLostException;
+import com.kenez92.client.player.PlayerInfo;
 import com.kenez92.client.racket.RacketService;
+import com.kenez92.client.sound.SoundEffect;
 import com.kenez92.client.sound.SoundService;
+import com.kenez92.client.timer.Clock;
 
 import java.util.List;
 
@@ -29,7 +29,8 @@ public class GameService {
     private PlayerInfo playerInfo;
     private GameState gameState;
     private Clock clock;
-    private final Timer timer;
+    private final Timer gameLoop;
+    private final Timer boardRefresh;
 
     public GameService() {
         this.boardService = new BoardService();
@@ -38,12 +39,19 @@ public class GameService {
         this.brickService = new BrickService();
         racketService.addListeners(boardService.getCanvas());
         addClickEvent();
-        this.timer = new Timer() {
+        this.gameLoop = new Timer() {
             @Override
             public void run() {
                 process();
             }
         };
+        this.boardRefresh = new Timer() {
+            @Override
+            public void run() {
+                drawBoard();
+            }
+        };
+        boardRefresh.run();
     }
 
     public Canvas getGameBoard() {
@@ -82,7 +90,7 @@ public class GameService {
     }
 
     private void process() {
-        this.timer.scheduleRepeating(BOARD_REFRESH_TIME);
+        this.gameLoop.scheduleRepeating(BOARD_REFRESH_TIME);
         checkGameState(brickService.getBricks());
         if (gameState == GameState.PLAYING) {
             try {
@@ -91,10 +99,9 @@ public class GameService {
                 lifeLost();
             }
         }
-        if (gameState == GameState.LOST || gameState == GameState.WIN) {
-            timer.cancel();
+        if (gameState == GameState.WIN || gameState == GameState.LOST) {
+            this.gameLoop.cancel();
         }
-        drawBoard();
     }
 
     private void checkGameState(List<Brick> bricks) {
@@ -112,6 +119,7 @@ public class GameService {
 
 
     private void drawBoard() {
+        this.boardRefresh.scheduleRepeating(BOARD_REFRESH_TIME);
         if (playerInfo != null) {
             boardService.refreshBoard(
                     ballService.getBall(), racketService.getRacket(), brickService.getBricks(),
@@ -126,6 +134,7 @@ public class GameService {
             ballService.resetBallPositions();
             gameState = GameState.ABOUT_TO_START;
         } else {
+            SoundService.sound(SoundEffect.GAME_LOST);
             gameState = GameState.LOST;
         }
     }

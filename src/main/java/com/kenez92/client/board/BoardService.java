@@ -6,9 +6,9 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.kenez92.client.game.GameState;
 import com.kenez92.client.ball.Ball;
 import com.kenez92.client.brick.Brick;
+import com.kenez92.client.game.GameState;
 import com.kenez92.client.racket.Racket;
 
 import java.util.List;
@@ -36,14 +36,13 @@ public class BoardService {
     }
 
     public void refreshBoard(Ball ball, Racket racket, List<Brick> bricks, int livesQuantity,
-                      String time, GameState gameState) {
+                             String time, GameState gameState) {
         if (canvas != null) {
             if (gameState == GameState.PLAYING) {
                 drawBoard(ball, racket, bricks, livesQuantity, time);
             } else if (gameState == GameState.LOST) {
                 drawGameOver(canvas.getContext2d());
             } else if (gameState == GameState.WIN) {
-
                 drawGameWin(canvas.getContext2d());
             } else if (gameState == GameState.ABOUT_TO_START || gameState == GameState.PAUSE) {
                 drawBoard(ball, racket, bricks, livesQuantity, time);
