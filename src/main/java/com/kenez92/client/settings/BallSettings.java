@@ -8,9 +8,9 @@ public class BallSettings {
     public static final double BALL_START_X_POSITION = (BOARD_WIDTH / 2.0) - (BALL_RADIUS / 2.0);
     public static final double BALL_START_Y_POSITION = BOARD_HEIGHT * 0.8;
     public static final double MAX_BALL_X_DIRECT = 2;
-    public static final int SLOW_BALL_SPEED = 3;
-    public static final int EASY_BALL_SPEED = 5;
-    public static final int NORMAL_BALL_SPEED = 7;
-    public static final int DIFFICULTY_BALL_SPEED = 9;
-    public static final int HARD_BALL_SPEED = 11;
+    public static final int SLOW_BALL_SPEED = 5;
+    public static final int EASY_BALL_SPEED = 10;
+    public static final int NORMAL_BALL_SPEED = 15;
+    public static final int DIFFICULTY_BALL_SPEED = 20;
+    public static final int HARD_BALL_SPEED = 30;
 }

@@ -37,17 +37,13 @@ public class Ball {
         this.yPosition = yPosition;
     }
 
-    public double getXDirect() {
-        return xDirect;
-    }
-
     public void setXDirect(double xDirect) {
         this.xDirect = xDirect;
     }
 
     public void move() {
-        this.xPosition = xPosition + xDirect * ballSpeed;
-        this.yPosition = yPosition + yDirect * ballSpeed;
+        this.xPosition = xPosition + xDirect;
+        this.yPosition = yPosition + yDirect;
     }
 
     public void setRightDirect() {
@@ -109,5 +105,9 @@ public class Ball {
                 ballSpeed = SLOW_BALL_SPEED;
         }
         this.ballSpeed = ballSpeed;
+    }
+
+    public int getBallSpeed() {
+        return ballSpeed;
     }
 }

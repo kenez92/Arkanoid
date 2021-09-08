@@ -89,18 +89,29 @@ public class GameService {
         process();
     }
 
+    private void drawBoard() {
+        this.boardRefresh.scheduleRepeating(BOARD_REFRESH_TIME);
+        if (playerInfo != null) {
+            boardService.refreshBoard(
+                    ballService.getBall(), racketService.getRacket(), brickService.getBricks(),
+                    playerInfo.getLives(), clock.getActualTime(), gameState);
+        }
+    }
+
     private void process() {
         this.gameLoop.scheduleRepeating(BOARD_REFRESH_TIME);
-        checkGameState(brickService.getBricks());
-        if (gameState == GameState.PLAYING) {
-            try {
-                ballService.process(racketService.getRacket(), brickService.getBricks());
-            } catch (LifeLostException ex) {
-                lifeLost();
+        for (int i = 0; i < ballService.getBall().getBallSpeed(); i++) {
+            checkGameState(brickService.getBricks());
+            if (gameState == GameState.PLAYING) {
+                try {
+                    ballService.process(racketService.getRacket(), brickService.getBricks());
+                } catch (LifeLostException ex) {
+                    lifeLost();
+                }
             }
-        }
-        if (gameState == GameState.WIN || gameState == GameState.LOST) {
-            this.gameLoop.cancel();
+            if (gameState == GameState.WIN || gameState == GameState.LOST) {
+                this.gameLoop.cancel();
+            }
         }
     }
 
@@ -114,16 +125,6 @@ public class GameService {
         if (clock.getTime() <= 0) {
             this.gameState = GameState.LOST;
             SoundService.sound(SoundEffect.GAME_LOST);
-        }
-    }
-
-
-    private void drawBoard() {
-        this.boardRefresh.scheduleRepeating(BOARD_REFRESH_TIME);
-        if (playerInfo != null) {
-            boardService.refreshBoard(
-                    ballService.getBall(), racketService.getRacket(), brickService.getBricks(),
-                    playerInfo.getLives(), clock.getActualTime(), gameState);
         }
     }
 
