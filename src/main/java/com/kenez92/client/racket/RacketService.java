@@ -4,6 +4,7 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 
 import static com.kenez92.client.settings.BoardSettings.BOARD_WIDTH;
+import static com.kenez92.client.settings.RacketSettings.RACKET_HALF_WIDTH;
 import static com.kenez92.client.settings.RacketSettings.RACKET_WIDTH;
 
 public class RacketService {
@@ -31,7 +32,7 @@ public class RacketService {
     }
 
     private void mouseMoving() {
-        racket.setXPosition(xPosition - RACKET_WIDTH / 2);
+        racket.setXPosition(xPosition - RACKET_HALF_WIDTH);
         if (racket.getXPosition() + RACKET_WIDTH >= BOARD_WIDTH) {
             racket.setXPosition(BOARD_WIDTH - RACKET_WIDTH);
         }

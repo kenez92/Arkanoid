@@ -14,9 +14,9 @@ import static com.kenez92.client.settings.BoardSettings.BOARD_HEIGHT;
 import static com.kenez92.client.settings.BoardSettings.BOARD_WIDTH;
 import static com.kenez92.client.settings.BrickSettings.BRICK_HEIGHT;
 import static com.kenez92.client.settings.BrickSettings.BRICK_WIDTH;
-import static com.kenez92.client.settings.RacketSettings.RACKET_COLLLISION_CORNER;
+import static com.kenez92.client.settings.RacketSettings.RACKET_COLLLISION_ANGLE;
+import static com.kenez92.client.settings.RacketSettings.RACKET_HALF_WIDTH;
 import static com.kenez92.client.settings.RacketSettings.RACKET_HEIGHT;
-import static com.kenez92.client.settings.RacketSettings.RACKET_PIECES;
 import static com.kenez92.client.settings.RacketSettings.RACKET_WIDTH;
 
 public class BallService {
@@ -78,7 +78,7 @@ public class BallService {
                 racket.getXPosition() + RACKET_WIDTH,
                 racket.getYPosition(),
                 racket.getYPosition() + RACKET_HEIGHT)) {
-            ball.setXDirect(getCorner(ball.getXPosition(), racket.getXPosition(), ball.getXDirect()));
+            ball.setXDirect(getAngle(ball.getXPosition(), racket.getXPosition()));
             ball.changeYDirect();
             ball.setYPosition(racket.getYPosition() - BALL_RADIUS - 1);
             return true;
@@ -103,16 +103,10 @@ public class BallService {
         return false;
     }
 
-    private double getCorner(double xBallPosition, double xRacketPosition, double xDirect) {
-        xBallPosition = xBallPosition + (BALL_RADIUS / 2);
-        double onePieceOfRacket = RACKET_PIECES;
-        double result = xBallPosition - xRacketPosition;
-        int pieceOfRacket = (int) (result / onePieceOfRacket);
-        if (xDirect > 0) {
-            return RACKET_COLLLISION_CORNER * pieceOfRacket;
-        } else {
-            return RACKET_COLLLISION_CORNER * (RACKET_PIECES - pieceOfRacket) * -1;
-        }
+    double getAngle(double xBallPosition, double xRacketPosition) {
+        double xCollision = xBallPosition + (BALL_RADIUS / 2);
+        double distanceFromRacketCenter = xCollision - xRacketPosition - RACKET_HALF_WIDTH;
+        return RACKET_COLLLISION_ANGLE * distanceFromRacketCenter;
     }
 
     public void changeDirectDependsOnBrickSide(BrickSide brickSide, double brickXPosition,
